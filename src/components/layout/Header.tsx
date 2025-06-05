@@ -1,8 +1,7 @@
-import ThemeToggle from "../Theme-toggle";
-
+import ThemeToggle from "../theme-toggle";
 const Header = () => {
   return (
-    <header className="bg-background text-foreground shadow-sm p-4 border-b dark:border-gray-700">
+    <header className="fixed top-0 left-0 w-full  z-50 p-4 bg-background text-foreground shadow-sm border-b dark:border-gray-700">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <img
