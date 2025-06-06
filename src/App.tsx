@@ -9,6 +9,7 @@ import Header from "./components/layout/Header";
 import type Task from "./types";
 import Form from "./components/Form";
 
+import { motion, AnimatePresence } from "framer-motion";
 type TaskPriorityType = Task["priority"];
 
 const initialTasks: Task[] = [
@@ -37,6 +38,8 @@ const initialTasks: Task[] = [
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
+
+  const [mounted, setMounted] = useState(false);
 
   const handleToggleComplete = (taskId: string) => {
     const taskToToggle = tasks.find((task) => task.id === taskId);
@@ -87,16 +90,98 @@ function App() {
         return "border-l-4 border-gray-300";
     }
   };
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  // const taskVariants = {
+  //   hidden: {
+  //     opacity: 0,
+  //     x: -50,
+  //     scale: 0.8,
+  //   },
+  //   visible: {
+  //     opacity: 1,
+  //     x: 0,
+  //     scale: 1,
+  //     transition: {
+  //       duration: 0.4,
+  //       ease: "easeOut",
+  //     },
+  //   },
+  //   exit: {
+  //     opacity: 0,
+  //     x: 50,
+  //     scale: 0.8,
+  //     transition: {
+  //       duration: 0.3,
+  //       ease: "easeIn",
+  //     },
+  //   },
+  // };
+
+  // const checkboxVariants = {
+  //   unchecked: { scale: 1 },
+  //   checked: {
+  //     scale: [1, 1.2, 1],
+  //     transition: { duration: 0.3 },
+  //   },
+  // };
+
+  // const statsVariants = {
+  //   hidden: { opacity: 0, y: 20 },
+  //   visible: {
+  //     opacity: 1,
+  //     y: 0,
+  //     transition: {
+  //       delay: 0.5,
+  //       duration: 0.4,
+  //     },
+  //   },
+  // };
+
+  // if (!mounted) {
+  //   return null;
+  // }
 
   return (
     <>
-      <div className="pt-[72px] flex flex-col w-full min-h-screen overflow-hidden dark:bg-gradient-to-br bg-[#e1c1eb] dark:from-[#1a1a2e] dark:via-[#231b32] dark:to-[#1f1f2f]">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="pt-[72px] flex flex-col w-full min-h-screen overflow-hidden dark:bg-gradient-to-br bg-[#e1c1eb] dark:from-[#1a1a2e] dark:via-[#231b32] dark:to-[#1f1f2f]"
+      >
         <Header />
-        <div className="block md:flex md:p-8 p-4">
-          <div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
+          className="flex flex-col justify-center items-center md:p-8 p-4 "
+        >
+          <div className="flex">
             <Form tasks={tasks} setTasks={setTasks} />
           </div>
-          <main className=" mx-auto p-4 sm:p-6 md:p-8 border-2">
+          <main className=" mx-auto p-2">
             <Card className="bg-card text-card-foreground shadow-xl">
               <CardContent className="pt-6">
                 {tasks.length === 0 ? (
@@ -104,7 +189,7 @@ function App() {
                     No tasks yet. Add one above to get started! :)
                   </p>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     {tasks.map((task) => (
                       <div
                         key={task.id}
@@ -112,7 +197,7 @@ function App() {
                                 ${getPriorityClass(task.priority)}
                                 ${
                                   task.completed
-                                    ? "bg-green-100/70 dark:bg-green-900/40 opacity-70"
+                                    ? "bg-gray-100/70 dark:bg-gray-900/40 opacity-70"
                                     : "bg-card"
                                 }`}
                       >
@@ -124,7 +209,7 @@ function App() {
                               handleToggleComplete(task.id)
                             }
                             aria-labelledby={`task-label-${task.id}`}
-                            className="transform scale-110"
+                            className="transform scale-110 cursor-pointer"
                           />
                           <div className="flex-grow">
                             <Label
@@ -160,7 +245,7 @@ function App() {
                           size="icon"
                           onClick={() => handleDeleteTask(task.id)}
                           aria-label={`Delete task titled ${task.title}`}
-                          className="text-red-500 hover:text-red-700 dark:hover:text-red-400 ml-2 flex-shrink-0"
+                          className="cursor-pointer text-red-500 hover:text-red-700 dark:hover:text-red-400 ml-2 flex-shrink-0"
                         >
                           <Trash2 className="h-5 w-5" />
                         </Button>
@@ -189,10 +274,10 @@ function App() {
               )}
             </Card>
           </main>
-        </div>
+        </motion.div>
 
         <Toaster richColors position="top-right" />
-      </div>
+      </motion.div>
     </>
   );
 }

@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 import {
   Select,
@@ -23,7 +22,8 @@ import {
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Plus, PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface FormProps {
   tasks: Task[];
@@ -57,14 +57,34 @@ const Form = ({ tasks, setTasks }: FormProps) => {
     setIsDialogOpen(false);
     toast.success("Task added successfully!");
   };
-
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
   return (
     <div>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg  "
+      >
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
-              <Plus size={18} />
+            <Button className=" w-full bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+              <motion.div
+                animate={{ rotate: isDialogOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Plus size={18} />
+              </motion.div>
               Add Task
             </Button>
           </DialogTrigger>
@@ -93,48 +113,16 @@ const Form = ({ tasks, setTasks }: FormProps) => {
                   <SelectItem value="low">Low</SelectItem>
                 </SelectContent>
               </Select>
-              <Button onClick={() => handleAddTask()} className="">Add Task</Button>
+              <Button
+                onClick={() => handleAddTask()}
+                className="cursor-pointer"
+              >
+                Add Task
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-
-      {/* <form
-        onSubmit={handleAddTask}
-        className="flex flex-col justify-center items-center gap-3 mb-8 p-4 border rounded-lg bg-muted/40"
-      >
-        <Input
-          type="text"
-          placeholder="Add a new task title..."
-          value={newTaskTitle}
-          onChange={(e) => setNewTaskTitle(e.target.value)}
-          className="flex-grow text-base"
-          aria-label="New task title"
-        />
-        <Select
-          value={newTaskPriority}
-          onValueChange={(value) =>
-            setNewTaskPriority(value as TaskPriorityType)
-          }
-        >
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Set priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="low">Low</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button
-          type="submit"
-          variant="default"
-          size="lg"
-          className="w-full sm:w-auto"
-        >
-          <PlusCircle className="mr-2 h-5 w-5" /> Add Task
-        </Button>
-      </form> */}
+      </motion.div>
     </div>
   );
 };

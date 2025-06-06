@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import ThemeToggle from "../theme-toggle";
 const Header = () => {
   return (
@@ -9,11 +10,15 @@ const Header = () => {
             src="/to-do-list.png"
             alt="Todos Lists Logo"
           />
-          <h1 className="text-2xl font-bold">
-            Todos Lists
-          </h1>
+          <h1 className="text-2xl font-bold">Todos Lists</h1>
         </div>
-        <ThemeToggle />
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <ThemeToggle />
+        </motion.div>
       </div>
     </header>
   );

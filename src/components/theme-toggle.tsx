@@ -10,7 +10,7 @@ const ThemeToggle = () => {
   };
 
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme} className='relative'>
+    <Button variant="outline" size="icon" onClick={toggleTheme} className='relative cursor-pointer'>
       <Sun
         className={`h-[1.2rem] w-[1.2rem] ${
           theme === 'light' ? 'rotate-0 scale-100' : 'rotate-90 scale-0'
